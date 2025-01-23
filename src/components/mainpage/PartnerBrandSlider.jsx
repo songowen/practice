@@ -1,13 +1,13 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import logo from "../../assets/brand_example.png"
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import logo from '../../assets/brand_example.png';
 const brands = [
-  { id: 1, name: "Brand A", logo: logo },
-  { id: 2, name: "Brand B", logo: logo},
-  { id: 3, name: "Brand C", logo: logo },
-  { id: 4, name: "Brand D", logo: logo },
+  { id: 1, name: 'Brand A', logo: logo },
+  { id: 2, name: 'Brand B', logo: logo },
+  { id: 3, name: 'Brand C', logo: logo },
+  { id: 4, name: 'Brand D', logo: logo },
 ];
 
 const PartnerBrandSlider = () => {
@@ -34,11 +34,14 @@ const PartnerBrandSlider = () => {
       <h2 className="text-xl font-bold text-gray-800 mb-4">제휴 브랜드</h2>
       <Slider {...settings}>
         {brands.map((brand) => (
-          <div key={brand.id} className="flex justify-center items-center p-4">
+          <div
+            key={brand.id}
+            className="flex justify-center items-center p-4 w-40 h-40 rounded-lg"
+          >
             <img
               src={brand.logo}
               alt={brand.name}
-              className="w-40 h-40 object-contain"
+              className="w-full h-full object-contain"
             />
           </div>
         ))}
