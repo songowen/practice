@@ -11,8 +11,8 @@ const HeroSection = () => {
       }}
     >
       {/* 왼쪽 텍스트 */}
-      <div className="w-full md:w-1/2 text-center md:text-left mb-8 md:mb-0 leading-loose">
-        <h1 className="text-4xl md:text-6xl font-bold text-white ">
+      <div className="w-full md:w-1/2 text-center md:text-left mb-8 md:mb-0 leading-loose md:leading-loose fade-in-left">
+        <h1 className="text-4xl md:text-6xl font-bold text-white">
           우리끼리
           <br /> 만드는
           <br />
@@ -21,7 +21,7 @@ const HeroSection = () => {
       </div>
 
       {/* 오른쪽 검색바 */}
-      <div className="w-full md:w-1/2 flex justify-center md:justify-end">
+      <div className="w-full md:w-1/2 flex justify-center md:justify-end fade-in-right">
         <SearchBar className="w-full max-w-lg" />
       </div>
     </div>

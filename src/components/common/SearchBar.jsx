@@ -17,30 +17,29 @@ const SearchBar = () => {
     const fetchAirports = async () => {
       try {
         const apiKey = import.meta.env.VITE_APP_AIRPORT_API_KEY;
-        const world_response = await fetch(
+        const worldResponse = await fetch(
           `https://api.odcloud.kr/api/3051587/v1/uddi:007305db-cbc2-4554-8988-f9109b2dad10?page=1&perPage=100&serviceKey=${apiKey}`
         );
         
-        const kr_response = await fetch(
+        const koreaResponse = await fetch(
           `https://api.odcloud.kr/api/3051587/v1/uddi:47338db4-719b-4162-9cc1-f7efd0bad374?page=1&perPage=100&serviceKey=${apiKey}`
         );
 
-        const world_data = await world_response.json();
-        const kr_data = await kr_response.json();
+        const worldData = await worldResponse.json();
+        const krData = await koreaResponse.json();
 
-        const koreaAirports = kr_data.data
+        const koreaAirports = krData.data
           .filter((airport) => airport['국가명_한글'] === '대한민국' && airport['한글명'].includes('국제'))
           .map((airport) => airport['한글명'])
           .sort();
 
-        const worldAirports = world_data.data
+        const worldAirports = worldData.data
           .map((airport) => airport['한글공항'])
           .sort();
 
         setKoreaAirports(koreaAirports);
         setWorldAirports(worldAirports);
       } catch (error) {
-        console.log('API Key:', process.env.REACT_APP_AIRPORT_API_KEY);
 
         console.error('공항 데이터 가져오기 실패:', error);
       }
@@ -53,29 +52,31 @@ const SearchBar = () => {
     <div className="flex justify-center mt-10">
       <div className="bg-white bg-opacity-30 p-6 rounded-md shadow-lg w-full max-w-3xl backdrop-blur-md">
         <form className="space-y-6">
-          <div className="relative flex justify-between items-center space-x-2">
-            <div
-              className={`flex-1 text-center py-2 rounded-md cursor-pointer ${
-                searchType === 'findRoom' ? 'text-white' : 'text-gray-300'
-              }`}
-              onClick={() => setSearchType('findRoom')}
-            >
-              방 찾기
-            </div>
-            <div
-              className={`flex-1 text-center py-2 rounded-md cursor-pointer ${
-                searchType === 'createGroup' ? 'text-white' : 'text-gray-300'
-              }`}
-              onClick={() => setSearchType('createGroup')}
-            >
-              방 만들기
-            </div>
-            <div
-              className={`absolute h-1 w-1/4 bg-dark-green transition-all duration-300 ${
-                searchType === 'findRoom' ? 'left-[12.5%]' : 'left-[62.5%]'
-              } bottom-0`}
-            ></div>
-          </div>
+        <div className="relative flex justify-between items-center">
+  <div
+    className={`flex-1 text-center py-2 rounded-md cursor-pointer ${
+      searchType === 'findRoom' ? 'text-white' : 'text-gray-300'
+    }`}
+    onClick={() => setSearchType('findRoom')}
+  >
+    방 찾기
+  </div>
+  <div
+    className={`flex-1 text-center py-2 rounded-md cursor-pointer ${
+      searchType === 'createGroup' ? 'text-white' : 'text-gray-300'
+    }`}
+    onClick={() => setSearchType('createGroup')}
+  >
+    방 만들기
+  </div>
+  <div
+    className={`absolute h-1 w-1/2 bg-dark-green transition-transform duration-300`}
+    style={{
+      transform: searchType === 'findRoom' ? 'translateX(0)' : 'translateX(100%)',
+      bottom: 0,
+    }}
+  ></div>
+</div>
 
           <div className="flex space-x-4">
             <div className="w-1/2">

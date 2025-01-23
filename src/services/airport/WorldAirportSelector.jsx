@@ -7,7 +7,7 @@ const WorldAirportSelector = ({ worldAirports, selectedAirport, onChange }) => {
       <select
         value={selectedAirport}
         onChange={onChange}
-        className="w-full px-4 py-2 bg-transparent border placeholder-white border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="w-full px-4 py-2 bg-transparent border text-white placeholder-white border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
         <option value="">도착 공항 선택</option>
         {worldAirports.map((airport) => (
