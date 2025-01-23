@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import logo from '../../assets/logo.png'; // 상대 경로로 로고 불러오기
+import { Link } from 'react-router-dom'; // react-router-dom에서 Link 가져오기
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false); // 메뉴 상태 관리
@@ -7,9 +8,9 @@ const Header = () => {
   return (
     <header className="h-20 flex justify-between items-center px-6 bg-white shadow-md">
       {/* 왼쪽 로고 */}
-      <div>
+      <Link to="/">
         <img src={logo} alt="Logo" className="w-32 h-32 ml-10 object-contain" />
-      </div>
+        </Link>
 
       {/* 오른쪽 메뉴 (큰 화면) */}
       <nav className="hidden md:flex space-x-6 mr-10">

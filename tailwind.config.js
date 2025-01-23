@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         'dark-green': '#4d6f7a', // 메인페이지 인디케이터 색상
+        'brown':'#A0522D', // 메인페이지 캐러셀 화살표 색상
       },
       fontFamily: {
         'noto-sans': ['Noto Sans KR', 'sans-serif'],
