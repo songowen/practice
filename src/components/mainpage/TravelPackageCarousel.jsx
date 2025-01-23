@@ -1,13 +1,13 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import img from '../../assets/package_sample.png'
+import React from 'react';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import img from '../../assets/package_sample.png';
 const packages = [
-  { id: 1, title: "파리 로맨틱 투어", image: img },
-  { id: 2, title: "뉴욕 시티 브레이크", image: img},
-  { id: 3, title: "도쿄 문화 탐방", image: img },
-  { id: 4, title: "발리 휴양 여행", image: img },
+  { id: 1, title: '파리 로맨틱 투어', image: img },
+  { id: 2, title: '뉴욕 시티 브레이크', image: img },
+  { id: 3, title: '도쿄 문화 탐방', image: img },
+  { id: 4, title: '발리 휴양 여행', image: img },
 ];
 
 const TravelPackageCarousel = () => {

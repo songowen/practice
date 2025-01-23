@@ -1,50 +1,82 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; // 달력 스타일 import
+import React, { useState, useEffect } from 'react';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import KoreaAirportSelector from '../../services/airport/KoreaAirportSelector';
+import WorldAirportSelector from '../../services/airport/WorldAirportSelector';
 
 const SearchBar = () => {
   const [startDate, setStartDate] = useState(null); // 출발일
   const [endDate, setEndDate] = useState(null); // 도착일
-  const [departureCity, setDepartureCity] = useState(""); // 출발 도시
-  const [arrivalCity, setArrivalCity] = useState(""); // 도착 도시
-  const [searchType, setSearchType] = useState("findRoom"); // 방 찾기 / 방 만들기
+  const [departureAirport, setDepartureAirport] = useState(''); // 출발 공항
+  const [arrivalAirport, setArrivalAirport] = useState(''); // 도착 공항
+  const [koreaAirports, setKoreaAirports] = useState([]); // 대한민국 공항 목록
+  const [worldAirports, setWorldAirports] = useState([]); // 전 세계 공항 목록
+  const [searchType, setSearchType] = useState('findRoom'); // 방 찾기 / 방 만들기
 
-  const handleSearchTypeChange = (e) => {
-    setSearchType(e.target.value);
-  };
+  useEffect(() => {
+    const fetchAirports = async () => {
+      try {
+        const api_key = 'iXTtgO3rSTBfwjOm9AHDGk1Ox2HXw9mvbBg%2FPuHfjzV2f3JW%2FnyvAy3laYm8ypfEPvM0nyjARJE6dqKEaVFbjA%3D%3D';
+        const world_response = await fetch(
+          `https://api.odcloud.kr/api/3051587/v1/uddi:007305db-cbc2-4554-8988-f9109b2dad10?page=1&perPage=100&serviceKey=${api_key}`
+        );
+        
+        const kr_response = await fetch(
+          `https://api.odcloud.kr/api/3051587/v1/uddi:47338db4-719b-4162-9cc1-f7efd0bad374?page=1&perPage=100&serviceKey=${api_key}`
+        );
+
+        const world_data = await world_response.json();
+        const kr_data = await kr_response.json();
+
+        console.log('world_data',world_data);  // 전 세계 공항 데이터 확인
+    console.log('kr_data',kr_data);  // 대한민국 공항 데이터 확인
+        const koreaAirports = kr_data.data
+          .filter((airport) => airport['국가명_한글'] === '대한민국' && airport['한글명'].includes('국제'))
+          .map((airport) => airport['한글명'])
+          .sort();
+
+        const worldAirports = world_data.data
+          .map((airport) => airport['한글공항'])
+          .sort();
+
+        setKoreaAirports(koreaAirports);
+        setWorldAirports(worldAirports);
+      } catch (error) {
+        console.error('공항 데이터 가져오기 실패:', error);
+      }
+    };
+
+    fetchAirports();
+  }, []);
 
   return (
     <div className="flex justify-center mt-10">
       <div className="bg-white bg-opacity-30 p-6 rounded-md shadow-lg w-full max-w-3xl backdrop-blur-md">
         <form className="space-y-6">
-          {/* 스위치 및 인디케이터 바 */}
-          <div className="relative flex justify-between items-center space-x-6">
+          <div className="relative flex justify-between items-center space-x-2">
             <div
               className={`flex-1 text-center py-2 rounded-md cursor-pointer ${
-                searchType === "findRoom" ? "bg-blue-500 text-white" : "text-blue-500"
+                searchType === 'findRoom' ? 'text-white' : 'text-gray-300'
               }`}
-              onClick={() => setSearchType("findRoom")}
+              onClick={() => setSearchType('findRoom')}
             >
               방 찾기
             </div>
             <div
               className={`flex-1 text-center py-2 rounded-md cursor-pointer ${
-                searchType === "createGroup" ? "bg-blue-500 text-white" : "text-blue-500"
+                searchType === 'createGroup' ? 'text-white' : 'text-gray-300'
               }`}
-              onClick={() => setSearchType("createGroup")}
+              onClick={() => setSearchType('createGroup')}
             >
               방 만들기
             </div>
-
-            {/* 인디케이터 바 */}
             <div
-              className={`absolute h-1 w-1/2 bg-blue-500 transition-all duration-300 ${
-                searchType === "findRoom" ? "left-0" : "left-1/2"
+              className={`absolute h-1 w-1/4 bg-dark-green transition-all duration-300 ${
+                searchType === 'findRoom' ? 'left-[12.5%]' : 'left-[62.5%]'
               } bottom-0`}
             ></div>
           </div>
 
-          {/* 출발일, 도착일 */}
           <div className="flex space-x-4">
             <div className="w-1/2">
               <label className="block text-sm font-medium text-gray-700">출발일</label>
@@ -68,40 +100,28 @@ const SearchBar = () => {
             </div>
           </div>
 
-          {/* 출발 도시, 도착 도시 */}
           <div className="flex space-x-4">
-            <div className="w-full">
-              <label className="block text-sm font-medium text-gray-700">출발 도시</label>
-              <input
-                type="text"
-                value={departureCity}
-                onChange={(e) => setDepartureCity(e.target.value)}
-                className="w-full px-4 py-2 bg-transparent border placeholder-white border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="출발 도시를 입력하세요"
-              />
-            </div>
+            <KoreaAirportSelector
+              koreaAirports={koreaAirports}
+              selectedAirport={departureAirport}
+              onChange={(e) => setDepartureAirport(e.target.value)}
+            />
           </div>
 
           <div className="flex space-x-4">
-            <div className="w-full">
-              <label className="block text-sm font-medium text-gray-700">도착 도시</label>
-              <input
-                type="text"
-                value={arrivalCity}
-                onChange={(e) => setArrivalCity(e.target.value)}
-                className="w-full px-4 py-2 bg-transparent border placeholder-white border-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="도착 도시를 입력하세요"
-              />
-            </div>
+            <WorldAirportSelector
+              worldAirports={worldAirports}
+              selectedAirport={arrivalAirport}
+              onChange={(e) => setArrivalAirport(e.target.value)}
+            />
           </div>
 
-          {/* 검색 버튼 */}
           <div className="text-center">
             <button
               type="submit"
-              className="w-full bg-white text-black text-white px-8 py-3 rounded-md hover:bg-blue-600 transition duration-300"
+              className="w-full font-bold bg-white text-dark-green px-8 py-3 rounded-md hover:bg-blue-600 transition duration-300 hover:text-white"
             >
-              검색하기
+              {searchType === 'findRoom' ? '검색하기' : '방 만들기'}
             </button>
           </div>
         </form>
