@@ -16,20 +16,18 @@ const SearchBar = () => {
   useEffect(() => {
     const fetchAirports = async () => {
       try {
-        const api_key = 'iXTtgO3rSTBfwjOm9AHDGk1Ox2HXw9mvbBg%2FPuHfjzV2f3JW%2FnyvAy3laYm8ypfEPvM0nyjARJE6dqKEaVFbjA%3D%3D';
+        const apiKey = import.meta.env.VITE_APP_AIRPORT_API_KEY;
         const world_response = await fetch(
-          `https://api.odcloud.kr/api/3051587/v1/uddi:007305db-cbc2-4554-8988-f9109b2dad10?page=1&perPage=100&serviceKey=${api_key}`
+          `https://api.odcloud.kr/api/3051587/v1/uddi:007305db-cbc2-4554-8988-f9109b2dad10?page=1&perPage=100&serviceKey=${apiKey}`
         );
         
         const kr_response = await fetch(
-          `https://api.odcloud.kr/api/3051587/v1/uddi:47338db4-719b-4162-9cc1-f7efd0bad374?page=1&perPage=100&serviceKey=${api_key}`
+          `https://api.odcloud.kr/api/3051587/v1/uddi:47338db4-719b-4162-9cc1-f7efd0bad374?page=1&perPage=100&serviceKey=${apiKey}`
         );
 
         const world_data = await world_response.json();
         const kr_data = await kr_response.json();
 
-        console.log('world_data',world_data);  // 전 세계 공항 데이터 확인
-    console.log('kr_data',kr_data);  // 대한민국 공항 데이터 확인
         const koreaAirports = kr_data.data
           .filter((airport) => airport['국가명_한글'] === '대한민국' && airport['한글명'].includes('국제'))
           .map((airport) => airport['한글명'])
@@ -42,6 +40,8 @@ const SearchBar = () => {
         setKoreaAirports(koreaAirports);
         setWorldAirports(worldAirports);
       } catch (error) {
+        console.log('API Key:', process.env.REACT_APP_AIRPORT_API_KEY);
+
         console.error('공항 데이터 가져오기 실패:', error);
       }
     };
