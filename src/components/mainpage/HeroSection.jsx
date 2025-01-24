@@ -5,7 +5,7 @@ import SearchBar from '../common/SearchBar';
 const HeroSection = () => {
   return (
     <div
-      className="min-h-screen bg-cover bg-center flex flex-col md:flex-row items-center px-6 md:px-20 py-10"
+      className="min-h-screen bg-cover bg-center flex flex-col md:flex-row items-center md:px-28 py-10"
       style={{
         backgroundImage: `url(${background})`,
       }}
