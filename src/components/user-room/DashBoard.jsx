@@ -1,14 +1,33 @@
-import React from 'react';
-import img from '../../assets/package_sample.png';
+import React, { useState, useEffect,useRef  } from 'react';
+
+const apiKey = import.meta.env.VITE_APP_UNSPLASH_API_KEY;
+
 const DashBoard = () => {
+  const [imageUrl, setImageUrl] = useState('');
+  const hasFetched = useRef(false); // fetch 여부를 추적
+
+  useEffect(() => {
+    // 일본과 관련된 랜덤 이미지를 가져오기
+    if(hasFetched.currrnt) return;
+    hasFetched.current = true;
+
+    const fetchImage = async () => {
+      const response = await fetch(`https://api.unsplash.com/photos/random?query=Japan&client_id=${apiKey}`);
+      const data = await response.json();
+      setImageUrl(data?.urls?.regular);  
+    };
+
+    fetchImage();
+  }, []);
   return (
     <div className="flex flex-col md:flex-row justify-between items-center bg-gray-100 p-8">
       {/* 여행 이미지 */}
       <img
-        src={img}
-        alt="Travel"
-        className="w-full md:w-1/3 object-cover rounded-lg shadow-md"
-      />
+  src={imageUrl}
+  alt="Travel"
+  className="w-full md:w-96 h-64 object-cover rounded-lg shadow-md"
+/>
+
 
       {/* 여행 패키지 정보 */}
       <div className="md:w-1/3 p-4">
